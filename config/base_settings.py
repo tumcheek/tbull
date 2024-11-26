@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': getenv('SPORTSCORE_DEV_DB_NAME', 'tbull'),
         'USER': getenv('SPORTSCORE_DEV_DB_USER', 'postgres'),
         'PASSWORD': getenv("SPORTSCORE_DEV_DB_PASS", "testingnotforproduction"),
-        'HOST': getenv('SPORTSCORE_DEV_DB_HOST', '127.0.0.1'),
+        'HOST': getenv('SPORTSCORE_DEV_DB_HOST', 'db'),
         'PORT': getenv('SPORTSCORE_DEV_DB_PORT', '5432'),
     }
 }
