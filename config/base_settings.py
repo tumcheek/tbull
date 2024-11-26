@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': getenv('SPORTSCORE_DEV_DB_NAME', 'tbull'),
-        'USER': getenv('SPORTSCORE_DEV_DB_USER', 'postgres'),
-        'PASSWORD': getenv("SPORTSCORE_DEV_DB_PASS", "testingnotforproduction"),
-        'HOST': getenv('SPORTSCORE_DEV_DB_HOST', 'db'),
-        'PORT': getenv('SPORTSCORE_DEV_DB_PORT', '5432'),
+        'NAME': getenv('DATABASE_NAME', 'tbull'),
+        'USER': getenv('DATABASE_USER', 'postgres'),
+        'PASSWORD': getenv("DATABASE_PASSWORD", "testingnotforproduction"),
+        'HOST': getenv('DATABASE_HOST', 'db'),
+        'PORT': getenv('DATABASE_PORT', '5432'),
     }
 }
 
