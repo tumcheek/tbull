@@ -44,8 +44,8 @@ services:
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
       - static_volume:/usr/src/tbull/static
-       - ./certificates:/etc/ssl/certs
-       - ./certificates:/etc/ssl/private
+      - ./certificates:/etc/ssl/certs
+      - ./certificates:/etc/ssl/private
     depends_on:
       - web
 
