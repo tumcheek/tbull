@@ -24,5 +24,8 @@ RUN chmod +x /usr/src/tbull/entrypoint.sh
 # Copy project
 COPY . .
 
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
 # Run entrypoint.sh
 ENTRYPOINT ["/usr/src/tbull/entrypoint.sh"]

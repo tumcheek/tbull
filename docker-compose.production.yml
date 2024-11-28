@@ -29,7 +29,7 @@ services:
     env_file:
       - .env
     environment:
-      - POSTGRES_DB=${DATABASE_NAME:-postgres}
+      - POSTGRES_DB=${DATABASE_NAME:-tbull}
       - POSTGRES_USER=${DATABASE_USER:-postgres}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD:?Please set DATABASE_PASSWORD in .env}
     volumes:
