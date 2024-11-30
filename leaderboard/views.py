@@ -1,13 +1,17 @@
 from django.db import transaction
+from django.db.models import Window, F, Subquery
+from django.db.models.functions import Rank
 from rest_framework import status, permissions
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from leaderboard.models import Leaderboard
 from leaderboard.serializers import LeaderboardSerializer
+from utils.mixins import ResponseMixin
 
 
-class LeaderboardApiView(ListCreateAPIView):
+class LeaderboardApiView(ResponseMixin,ListCreateAPIView):
     """
     API view to retrieve the list of leaderboards or create a new leaderboard entry.
     """
@@ -66,10 +70,7 @@ class LeaderboardApiView(ListCreateAPIView):
         Override the default create method to handle create or update logic.
         """
         if not request.user.is_authenticated:
-            return Response(
-                {"detail": "Authentication credentials were not provided."},
-                status=status.HTTP_401_UNAUTHORIZED,
-            )
+            return self.unauthorized_response()
         return self.create_or_update(request, *args, **kwargs)
 
     def perform_update(self, serializer):
@@ -77,3 +78,23 @@ class LeaderboardApiView(ListCreateAPIView):
         Save the updated leaderboard entry.
         """
         serializer.save()
+
+
+
+class LeaderboardMyRankApiView(ResponseMixin, APIView):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return self.unauthorized_response()
+
+        ranked_leaderboard = Leaderboard.objects.annotate(
+            rank=Window(
+                expression=Rank(),
+                order_by=F('score').desc()
+            )
+        )
+
+        ranks = list(filter(lambda record: record.user == request.user, ranked_leaderboard))
+
+        user_rank = ranks[0].rank if ranks else None
+
+        return Response({'rank': user_rank})
