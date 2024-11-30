@@ -1,8 +1,9 @@
 from django.db import transaction
-from django.db.models import Window, F, Subquery
+from django.db.models import Window, F
 from django.db.models.functions import Rank
 from rest_framework import status, permissions
 from rest_framework.generics import ListCreateAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -81,11 +82,10 @@ class LeaderboardApiView(ResponseMixin,ListCreateAPIView):
 
 
 
-class LeaderboardMyRankApiView(ResponseMixin, APIView):
-    def get(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return self.unauthorized_response()
+class LeaderboardMyRankApiView(APIView):
+    permission_classes = [IsAuthenticated]
 
+    def get(self, request, *args, **kwargs):
         ranked_leaderboard = Leaderboard.objects.annotate(
             rank=Window(
                 expression=Rank(),
@@ -94,7 +94,6 @@ class LeaderboardMyRankApiView(ResponseMixin, APIView):
         )
 
         ranks = list(filter(lambda record: record.user == request.user, ranked_leaderboard))
-
         user_rank = ranks[0].rank if ranks else None
 
         return Response({'rank': user_rank})
