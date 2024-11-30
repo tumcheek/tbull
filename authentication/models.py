@@ -18,3 +18,4 @@ def validate_tron_wallet_address(value: str):
 
 class User(AbstractUser):
     wallet = models.CharField(max_length=34, validators=[validate_tron_wallet_address], unique=True)
+    coins = models.PositiveIntegerField(default=0)
