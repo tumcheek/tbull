@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from leaderboard.models import Leaderboard
+from leaderboard.pagination import LeaderboardPagination
 from leaderboard.serializers import LeaderboardSerializer
 from utils.mixins import ResponseMixin
 
@@ -19,6 +20,7 @@ class LeaderboardApiView(ResponseMixin,ListCreateAPIView):
     queryset = Leaderboard.objects.select_related('user').order_by('-score')
     serializer_class = LeaderboardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    pagination_class = LeaderboardPagination
 
     def create_or_update(self, request, *args, **kwargs):
         """
